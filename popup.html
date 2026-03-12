@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HostKey</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600&display=swap");
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --bg: #0d1117;
+        --surface: #161b22;
+        --border: #30363d;
+        --accent: #58a6ff;
+        --accent-dim: #1f6feb33;
+        --green: #3fb950;
+        --text: #e6edf3;
+        --muted: #8b949e;
+        --danger: #f85149;
+        --radius: 8px;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        width: 320px;
+        padding: 0;
+        overflow: hidden;
+      }
+
+      .header {
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        padding: 16px 20px 14px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .logo {
+        width: 28px;
+        height: 28px;
+        background: var(--accent-dim);
+        border: 1px solid var(--accent);
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        flex-shrink: 0;
+      }
+
+      .header-text h1 {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text);
+        letter-spacing: 0.01em;
+      }
+
+      .header-text p {
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 1px;
+      }
+
+      .body {
+        padding: 18px 20px 20px;
+      }
+
+      .field {
+        margin-bottom: 16px;
+      }
+
+      label {
+        display: block;
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 7px;
+      }
+
+      .input-wrap {
+        position: relative;
+      }
+
+      .prefix {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+        color: var(--muted);
+        pointer-events: none;
+        user-select: none;
+      }
+
+      input[type="text"] {
+        width: 100%;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        color: var(--text);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 13px;
+        padding: 9px 12px 9px 42px;
+        outline: none;
+        transition:
+          border-color 0.15s,
+          box-shadow 0.15s;
+      }
+
+      input[type="text"]:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px var(--accent-dim);
+      }
+
+      .preview {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 12px 14px;
+        margin-bottom: 16px;
+      }
+
+      .preview-label {
+        font-size: 10px;
+        font-weight: 600;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 8px;
+      }
+
+      .preview-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        line-height: 1.5;
+      }
+
+      .preview-row + .preview-row {
+        margin-top: 6px;
+      }
+
+      .tag {
+        font-size: 9px;
+        font-weight: 700;
+        padding: 1px 5px;
+        border-radius: 3px;
+        flex-shrink: 0;
+        margin-top: 2px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .tag-before {
+        background: #30363d;
+        color: var(--muted);
+      }
+
+      .tag-after {
+        background: #1a3a1a;
+        color: var(--green);
+      }
+
+      .preview-url {
+        color: var(--text);
+        word-break: break-all;
+      }
+
+      .preview-url .highlight {
+        color: var(--accent);
+        font-weight: 600;
+      }
+
+      .preview-url .dim {
+        color: var(--muted);
+      }
+
+      .btn {
+        width: 100%;
+        padding: 10px;
+        border-radius: var(--radius);
+        font-family: "Inter", sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+        transition: all 0.15s;
+        letter-spacing: 0.01em;
+      }
+
+      .btn-primary {
+        background: var(--accent);
+        color: #0d1117;
+      }
+
+      .btn-primary:hover {
+        background: #79c0ff;
+      }
+
+      .btn-primary:active {
+        transform: scale(0.98);
+      }
+
+      .status {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        color: var(--green);
+        margin-top: 10px;
+        min-height: 18px;
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+
+      .status.visible {
+        opacity: 1;
+      }
+
+      .status-dot {
+        width: 6px;
+        height: 6px;
+        background: var(--green);
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+
+      .hint {
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 6px;
+        line-height: 1.5;
+        padding: 8px 10px;
+        background: #161b2280;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+      }
+
+      .hint code {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10.5px;
+        color: var(--accent);
+      }
+
+      .divider {
+        height: 1px;
+        background: var(--border);
+        margin: 0 0 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div class="logo">⌁</div>
+      <div class="header-text">
+        <h1>HostKey</h1>
+        <p>Your SSH config alias, everywhere on GitHub</p>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="field">
+        <label>Your SSH Config Host Alias</label>
+        <div class="input-wrap">
+          <span class="prefix">git@</span>
+          <input
+            type="text"
+            id="aliasInput"
+            placeholder="github"
+            spellcheck="false"
+            autocomplete="off"
+          />
+        </div>
+        <!-- <div class="hint" style="margin-top: 8px">
+          Matches your <code>~/.ssh/config</code> <code>Host</code> entry.<br />
+          e.g. <code>Host github</code> → enter <code>github</code>
+        </div> -->
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="preview">
+        <div class="preview-label">Live Preview</div>
+        <div class="preview-row">
+          <span class="tag tag-before">Before</span>
+          <span class="preview-url">
+            <span class="dim">git@</span
+            ><span class="highlight">github.com</span
+            ><span class="dim">:user/repo.git</span>
+          </span>
+        </div>
+        <div class="preview-row">
+          <span class="tag tag-after">After</span>
+          <span class="preview-url" id="previewAfter">
+            <span class="dim">git@</span
+            ><span class="highlight" id="previewAlias">github</span
+            ><span class="dim">:user/repo.git</span>
+          </span>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" id="saveBtn">Save Alias</button>
+
+      <div class="status" id="status">
+        <div class="status-dot"></div>
+        <span>Alias saved — reload GitHub tabs to apply</span>
+      </div>
+    </div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
